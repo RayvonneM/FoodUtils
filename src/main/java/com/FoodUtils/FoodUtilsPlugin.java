@@ -1,4 +1,4 @@
-package com.example;
+package com.FoodUtils;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -11,28 +11,38 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
+
 
 @Slf4j
 @PluginDescriptor(
-	name = "Example"
+	name = "FoodUtils"
 )
-public class ExamplePlugin extends Plugin
+public class FoodUtilsPlugin extends Plugin
 {
 	@Inject
 	private Client client;
 
 	@Inject
-	private ExampleConfig config;
+	private FoodUtilsConfig config;
+
+	@Inject
+	private OverlayManager overlayManager;
+
+	@Inject
+	private FoodHealOverlay foodHealOverlay;
 
 	@Override
 	protected void startUp() throws Exception
 	{
+		overlayManager.add(foodHealOverlay);
 		log.debug("Example started!");
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
+		overlayManager.remove(foodHealOverlay);
 		log.debug("Example stopped!");
 	}
 
@@ -46,8 +56,8 @@ public class ExamplePlugin extends Plugin
 	}
 
 	@Provides
-	ExampleConfig provideConfig(ConfigManager configManager)
+	FoodUtilsConfig provideConfig(ConfigManager configManager)
 	{
-		return configManager.getConfig(ExampleConfig.class);
+		return configManager.getConfig(FoodUtilsConfig.class);
 	}
 }

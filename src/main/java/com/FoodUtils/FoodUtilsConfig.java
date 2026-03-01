@@ -3,20 +3,9 @@ package com.FoodUtils;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
-import com.FoodUtils.TextPosition;
-import com.FoodUtils.HealDisplayMode;
 
 @ConfigGroup("foodUtils")
 public interface FoodUtilsConfig extends Config {
-	@ConfigItem(
-			keyName = "greeting",
-			name = "Welcome Greeting",
-			description = "Message shown when you log in"
-	)
-	default String greeting()
-	{
-		return "Welcome to FoodUtils";
-	}
 	@ConfigItem(
 			position = 1,
 			keyName = "textPosition",

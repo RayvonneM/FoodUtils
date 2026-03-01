@@ -46,15 +46,6 @@ public class FoodUtilsPlugin extends Plugin
 		log.debug("Example stopped!");
 	}
 
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
-		}
-	}
-
 	@Provides
 	FoodUtilsConfig provideConfig(ConfigManager configManager)
 	{

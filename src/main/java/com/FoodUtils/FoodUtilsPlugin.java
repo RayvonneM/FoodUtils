@@ -12,12 +12,15 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.plugins.PluginDependency;
+import net.runelite.client.plugins.itemstats.ItemStatPlugin;
 
 
 @Slf4j
 @PluginDescriptor(
 	name = "FoodUtils"
 )
+@PluginDependency(ItemStatPlugin.class)
 public class FoodUtilsPlugin extends Plugin
 {
 	@Inject
@@ -32,10 +35,14 @@ public class FoodUtilsPlugin extends Plugin
 	@Inject
 	private FoodHealOverlay foodHealOverlay;
 
+	@Inject
+	private PotionOverlay potionOverlay;
+
 	@Override
 	protected void startUp() throws Exception
 	{
 		overlayManager.add(foodHealOverlay);
+		overlayManager.add(potionOverlay);
 		log.debug("Food Utils Running");
 	}
 
@@ -43,6 +50,7 @@ public class FoodUtilsPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		overlayManager.remove(foodHealOverlay);
+		overlayManager.remove(potionOverlay);
 		log.debug("Food Utils Stopped");
 	}
 

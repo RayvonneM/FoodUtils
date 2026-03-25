@@ -5,20 +5,23 @@ import net.runelite.api.Point;
 import java.awt.*;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import com.FoodUtils.enums.MixedConsumableMode;
 
 public class FoodHealOverlay extends WidgetItemOverlay{
 
     private final FoodUtilsConfig config;
     private final Client client;
     private final FoodData foodData;
+    private final PotionData potionData;
 
 
     @Inject
-    public FoodHealOverlay(Client client, FoodUtilsConfig config)
+    public FoodHealOverlay(Client client, FoodUtilsConfig config, FoodData foodData, PotionData potionData)
     {
         this.config = config;
         this.client = client;
-        this.foodData = new FoodData();
+        this.foodData = foodData;
+        this.potionData = potionData;
         showOnInventory();
     }
 
@@ -35,6 +38,19 @@ public class FoodHealOverlay extends WidgetItemOverlay{
         {
             return;
         }
+
+        PotionData.PotionInfo potionInfo = null;
+
+        if (config.showPotions())
+        {
+            potionInfo = potionData.calculate(itemId);
+        }
+
+        if (potionInfo != null && config.mixedConsumableMode() == MixedConsumableMode.BOOST)
+        {
+            return;
+        }
+
         int currentHP = client.getBoostedSkillLevel(Skill.HITPOINTS);
         int baseHP = client.getRealSkillLevel(Skill.HITPOINTS);
         //Null Error handling

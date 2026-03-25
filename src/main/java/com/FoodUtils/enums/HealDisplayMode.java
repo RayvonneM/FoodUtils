@@ -1,4 +1,4 @@
-package com.FoodUtils;
+package com.FoodUtils.enums;
 
 public enum HealDisplayMode
 {

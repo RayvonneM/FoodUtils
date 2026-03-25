@@ -1,100 +1,51 @@
 package com.FoodUtils;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.Range;
+import com.FoodUtils.enums.HealDisplayMode;
+import com.FoodUtils.enums.TextPosition;
+import com.FoodUtils.enums.MixedConsumableMode;
+import net.runelite.client.config.*;
 
 @ConfigGroup("foodUtils")
-public interface FoodUtilsConfig extends Config {
+public interface FoodUtilsConfig extends Config
+{
+	@ConfigSection(
+			name = "General",
+			description = "General Display Settomgs",
+			position = 0
+	)
+	String generalSection = "generalSection";
+
+	@ConfigSection(
+			name = "Healing",
+			description = "Food healing settings",
+			position = 1
+	)
+	String healingSection = "healingSection";
+
+	@ConfigSection(
+			name = "Potions",
+			description = "Potion Display settings",
+			position = 2
+	)
+	String potionsSection = "PotionsSection";
+
 	@ConfigItem(
-			position = 1,
+			position = 0,
 			keyName = "textPosition",
 			name = "Text Position",
-			description = "Where the heal number appears on items"
+			description = "Where the heal number appears on items",
+			section = generalSection
 	)
 	default TextPosition textPosition(){
 		return TextPosition.BOTTOM_RIGHT;
 	}
-	@ConfigItem(
-			position = 4,
-			keyName = "shadow",
-			name = "Enable Shadow",
-			description = "Draw black shadow behind text"
-	)
-	default boolean shadow()
-	{
-		return true;
-	}
-	@ConfigItem(
-			position = 0,
-			keyName = "healDisplayMode",
-			name = "Heal Display",
-			description = "Shoow base heal, effective heal, or both"
-	)
-	default HealDisplayMode healDisplayMode()
-	{
-		return HealDisplayMode.BOTH;
-	}
-	@ConfigItem(
-			position = 6,
-			keyName = "colorForWaste",
-			name = "Color for wasted healing",
-			description ="Color food red when it would waste healing"
-	)
-	default boolean colorForWaste()
-	{
-		return true;
-	}
-	@ConfigItem(
-			position = 7,
-			keyName = "noHealColor",
-			name = "No-heal Color",
-			description = "Text color when you are at full HP (missing = 0)"
-	)
-	default java.awt.Color noHealColor()
-	{
-		return java.awt.Color.GRAY;
-	}
 
 	@ConfigItem(
-			position = 8,
-			keyName = "wasteColor",
-			name = "Waste Color",
-			description = "Text color when eating would waste healing (missing < base)"
-	)
-	default java.awt.Color wasteColor()
-	{
-		return java.awt.Color.RED;
-	}
-
-	@ConfigItem(
-			position = 9,
-			keyName = "fullValueColor",
-			name = "Full-value Color",
-			description = "Text color when you will get the full heal (missing >= base)"
-	)
-	default java.awt.Color fullValueColor()
-	{
-		return java.awt.Color.WHITE;
-	}
-
-	@ConfigItem(
-			position = 5,
-			keyName ="Hover Toggle",
-			name = "Show only on hover",
-			description = " Display heal values on when hover an item"
-	)
-	default boolean onlyShowOnHover()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-			position = 2,
+			position = 1,
 			keyName = "xOffset",
 			name = "X offset",
-			description = "Horizontal adjustment for heal text"
+			description = "Horizontal adjustment for heal text",
+			section = generalSection
 	)
 	default int xOffset()
 	{
@@ -102,10 +53,11 @@ public interface FoodUtilsConfig extends Config {
 	}
 
 	@ConfigItem(
-			position = 3,
+			position = 2,
 			keyName = "yOffset",
 			name = "Y offset",
-			description = "Vertical adjustment for heal text"
+			description = "Vertical adjustment for heal text",
+			section = generalSection
 	)
 	default int yOffset()
 	{
@@ -117,12 +69,120 @@ public interface FoodUtilsConfig extends Config {
 			max = 24
 	)
 	@ConfigItem(
+			position = 3,
 			keyName = "fontSize",
 			name = "Font size",
-			description = "Size of heal text"
+			description = "Size of heal text",
+			section = generalSection
 	)
 	default int fontSize()
 	{
 		return 14;
+	}
+
+	@ConfigItem(
+			position = 4,
+			keyName = "shadow",
+			name = "Enable Shadow",
+			description = "Draw black shadow behind text",
+			section = generalSection
+	)
+	default boolean shadow()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 5,
+			keyName ="Hover Toggle",
+			name = "Show only on hover",
+			description = " Display heal values on when hover an item",
+			section = generalSection
+	)
+	default boolean onlyShowOnHover()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 0,
+			keyName = "healDisplayMode",
+			name = "Heal Display",
+			description = "Shoow base heal, effective heal, or both",
+			section = healingSection
+	)
+	default HealDisplayMode healDisplayMode()
+	{
+		return HealDisplayMode.BOTH;
+	}
+	@ConfigItem(
+			position = 1,
+			keyName = "colorForWaste",
+			name = "Color for wasted healing",
+			description ="Color food red when it would waste healing",
+			section = healingSection
+	)
+	default boolean colorForWaste()
+	{
+		return true;
+	}
+	@ConfigItem(
+			position = 2,
+			keyName = "noHealColor",
+			name = "No-heal Color",
+			description = "Text color when you are at full HP (missing = 0)",
+			section = healingSection
+	)
+	default java.awt.Color noHealColor()
+	{
+		return java.awt.Color.GRAY;
+	}
+
+	@ConfigItem(
+			position = 3,
+			keyName = "wasteColor",
+			name = "Waste Color",
+			description = "Text color when eating would waste healing (missing < base)",
+			section = healingSection
+	)
+	default java.awt.Color wasteColor()
+	{
+		return java.awt.Color.RED;
+	}
+
+	@ConfigItem(
+			position = 4,
+			keyName = "fullValueColor",
+			name = "Full-value Color",
+			description = "Text color when you will get the full heal (missing >= base)",
+			section = healingSection
+	)
+	default java.awt.Color fullValueColor()
+	{
+		return java.awt.Color.WHITE;
+	}
+
+	@ConfigItem(
+			keyName = "showPotions",
+			name = "Show potion boosts",
+			description = "Show potion boost values on supported potion items",
+			position = 0,
+			section = potionsSection
+	)
+	default boolean showPotions()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "mixedConsumableMode",
+			name = "Display Mode",
+			description = "For items that both heal and boost, choose whether to show heal or boost values",
+			position = 1,
+			section = potionsSection
+	)
+	default MixedConsumableMode mixedConsumableMode()
+	{
+		return MixedConsumableMode.HEAL;
 	}
 }

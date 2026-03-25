@@ -1,45 +1,76 @@
 # FoodUtils
 
-A quality-of-life RuneLite external plugin that displays how much HP food will restore directly on inventory items.
+A quality-of-life RuneLite plugin that displays consumable values directly on inventory items.
 
-## Features
+---
 
-- Displays healing values on food items in your inventory
-- Shows:
-  - Base heal
-  - Effective heal
-  - Both (configurable)
-- Color indicators for:
-  - Full heal
-  - Wasted heal
-  - No heal
-- Supports special healing mechanics:
-  - Standard food
-  - Anglerfish (overheal logic)
-  - Saradomin brews
+## ✨ Features
 
-## Customization
+- Calculates how much you will actually gain based on current stats
+- Supports both food and potion effects
+- Handles special cases like anglerfish, brews, and multi-effect items
+- Customizable display, positioning, and colors
 
-- Multiple text positions:
-  - Top left / Top right
-  - Middle left / Middle right
-  - Bottom left / Bottom right
+---
+
+## ⚖️ Mixed Consumables
+
+Some items both heal and boost stats.
+
+You can choose how these are displayed:
+
+- **Heal mode** → shows healing values
+- **Boost mode** → shows stat boosts
+
+This prevents overlapping overlays.
+
+---
+
+## ⚙️ Customization
+
+### Display
+- Text position (6 options)
 - Adjustable font size
-- X and Y offset for fine positioning
-- Optional hover-only display mode
+- X/Y offset
+- Optional hover-only display
+- Optional text shadow
 
-## Menu
-![Menu Example](Images/Menu.png)
+### Value Modes
+- Base value
+- Effective value (after waste)
+- Both
 
+### Colors
+- Full value
+- Partial waste
+- No value
 
-## Base Healing Display Mode
+### Potions
+- Toggle potion overlays
+- Mixed consumable mode
 
-![Base Heal Example](Images/BaseHp.png)
+---
 
-## Effective Healing Display Mode
-- Note HP is 99 but currently 90 due to rock cake usage
+## 🖼️ Examples
 
-![Effective Heal Example](Images/EffectiveHP.png)
+*HP is 99 but currently reduced (e.g. rock cake), so effective healing is lower.*
 
-## Both Healing Display Mode
-![Both Heal Example](Images/BothHp.png)
+| Base | Effective | Both |
+|------|----------|------|
+| ![Base](Images/BaseHp.png) | ![Effective](Images/EffectiveHP.png) | ![Both](Images/BothHp.png) |
+
+---
+
+## 🧰 Menu
+
+![Menu Example](Images/Menu2.png)
+
+---
+
+## 🚀 Version
+
+**v1.2.0**
+- Added potion boost overlay
+- Added mixed consumable handling
+- Switched food handling to RuneLite item stat system
+- Improved overlay accuracy  

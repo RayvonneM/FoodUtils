@@ -11,7 +11,7 @@ public interface FoodUtilsConfig extends Config
 {
 	@ConfigSection(
 			name = "General",
-			description = "General Display Settomgs",
+			description = "General Display Settings",
 			position = 0
 	)
 	String generalSection = "generalSection";
@@ -28,7 +28,7 @@ public interface FoodUtilsConfig extends Config
 			description = "Potion Display settings",
 			position = 2
 	)
-	String potionsSection = "PotionsSection";
+	String potionsSection = "potionsSection";
 
 	@ConfigItem(
 			position = 0,
@@ -95,9 +95,9 @@ public interface FoodUtilsConfig extends Config
 
 	@ConfigItem(
 			position = 5,
-			keyName ="Hover Toggle",
+			keyName = "hoverToggle",
 			name = "Show only on hover",
-			description = " Display heal values on when hover an item",
+			description = "Display heal values only when hovering an item",
 			section = generalSection
 	)
 	default boolean onlyShowOnHover()
@@ -109,7 +109,7 @@ public interface FoodUtilsConfig extends Config
 			position = 0,
 			keyName = "healDisplayMode",
 			name = "Heal Display",
-			description = "Shoow base heal, effective heal, or both",
+			description = "Show base heal, effective heal, or both",
 			section = healingSection
 	)
 	default HealDisplayMode healDisplayMode()
@@ -144,35 +144,12 @@ public interface FoodUtilsConfig extends Config
 			position = 3,
 			keyName = "colorForWaste",
 			name = "Color for wasted healing",
-			description ="Color food red when it would waste healing",
+			description = "Enable color indicators based on heal waste",
 			section = healingSection
 	)
 	default boolean colorForWaste()
 	{
 		return true;
-	}
-	@ConfigItem(
-			position = 2,
-			keyName = "noHealColor",
-			name = "No-heal Color",
-			description = "Text color when you are at full HP (missing = 0)",
-			section = healingSection
-	)
-	default java.awt.Color noHealColor()
-	{
-		return java.awt.Color.GRAY;
-	}
-
-	@ConfigItem(
-			position = 3,
-			keyName = "wasteColor",
-			name = "Waste Color",
-			description = "Text color when eating would waste healing (missing < base)",
-			section = healingSection
-	)
-	default java.awt.Color wasteColor()
-	{
-		return java.awt.Color.RED;
 	}
 
 	@ConfigItem(
@@ -185,6 +162,30 @@ public interface FoodUtilsConfig extends Config
 	default java.awt.Color fullValueColor()
 	{
 		return java.awt.Color.WHITE;
+	}
+
+	@ConfigItem(
+			position = 5,
+			keyName = "wasteColor",
+			name = "Waste Color",
+			description = "Text color when eating would waste healing (missing < base)",
+			section = healingSection
+	)
+	default java.awt.Color wasteColor()
+	{
+		return java.awt.Color.RED;
+	}
+
+	@ConfigItem(
+			position = 6,
+			keyName = "noHealColor",
+			name = "No-heal Color",
+			description = "Text color when you are at full HP (missing = 0)",
+			section = healingSection
+	)
+	default java.awt.Color noHealColor()
+	{
+		return java.awt.Color.GRAY;
 	}
 
 	@ConfigItem(
@@ -213,7 +214,7 @@ public interface FoodUtilsConfig extends Config
 
 	@ConfigItem(
 			keyName = "mixedConsumableMode",
-			name = "Display Mode",
+			name = "Mixed Consumable Display",
 			description = "For items that both heal and boost, choose whether to show heal or boost values",
 			position = 1,
 			section = potionsSection

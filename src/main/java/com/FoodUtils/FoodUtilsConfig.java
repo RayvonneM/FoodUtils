@@ -1,6 +1,7 @@
 package com.FoodUtils;
 
 import com.FoodUtils.enums.HealDisplayMode;
+import com.FoodUtils.enums.DelayedDisplayMode;
 import com.FoodUtils.enums.TextPosition;
 import com.FoodUtils.enums.MixedConsumableMode;
 import net.runelite.client.config.*;
@@ -117,6 +118,30 @@ public interface FoodUtilsConfig extends Config
 	}
 	@ConfigItem(
 			position = 1,
+			keyName = "delayedDisplayMode",
+			name = "Delayed Heal Display",
+			description = "How to display foods that heal in two stages (e.g. hunter meats)",
+			section = healingSection
+	)
+	default DelayedDisplayMode delayedDisplayMode()
+	{
+		return DelayedDisplayMode.DUAL;
+	}
+
+	@ConfigItem(
+			position = 2,
+			keyName = "multiColorDelayed",
+			name = "Multi-color Delayed Heals",
+			description = "Color each portion of a delayed heal separately based on whether it is wasted",
+			section = healingSection
+	)
+	default boolean multiColorDelayed()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			position = 3,
 			keyName = "colorForWaste",
 			name = "Color for wasted healing",
 			description ="Color food red when it would waste healing",
@@ -172,6 +197,18 @@ public interface FoodUtilsConfig extends Config
 	default boolean showPotions()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+			keyName = "gradualPotionColor",
+			name = "Gradual Potion Color",
+			description = "Text color for potions that restore stats gradually over time (e.g. prayer regeneration potion)",
+			position = 2,
+			section = potionsSection
+	)
+	default java.awt.Color gradualPotionColor()
+	{
+		return new java.awt.Color(255, 200, 0);
 	}
 
 	@ConfigItem(

@@ -6,13 +6,12 @@ import javax.inject.Inject;
 import net.runelite.api.Client;
 import com.FoodUtils.enums.MixedConsumableMode;
 
-public class PotionOverlay  extends WidgetItemOverlay{
+public class PotionOverlay extends WidgetItemOverlay {
 
     private final FoodUtilsConfig config;
     private final Client client;
-    private final PotionData  potionData;
+    private final PotionData potionData;
     private final FoodData foodData;
-
 
     @Inject
     public PotionOverlay(Client client, FoodUtilsConfig config, PotionData potionData, FoodData foodData)
@@ -27,70 +26,63 @@ public class PotionOverlay  extends WidgetItemOverlay{
     @Override
     public void renderItemOverlay(java.awt.Graphics2D graphics, int itemId, net.runelite.api.widgets.WidgetItem item)
     {
-
-        if (!config.showPotions())
-        {
-            return;
-        }
-
-        //Null error handling
-        if (graphics == null || item == null)
-        {
-            return;
-        }
+        if (!config.showPotions()) return;
+        if (graphics == null || item == null) return;
 
         Rectangle bounds = item.getCanvasBounds();
-        if (bounds == null)
-        {
-            return;
-        }
+        if (bounds == null) return;
 
         int currentHP = client.getBoostedSkillLevel(net.runelite.api.Skill.HITPOINTS);
         int baseHP = client.getRealSkillLevel(net.runelite.api.Skill.HITPOINTS);
 
         FoodData.FoodInfo foodInfo = foodData.calculate(itemId, baseHP, currentHP);
+        if (foodInfo != null && config.mixedConsumableMode() == MixedConsumableMode.HEAL) return;
 
-        if (foodInfo != null && config.mixedConsumableMode() == MixedConsumableMode.HEAL)
-        {
-            return;
-        }
-
-        //Null Error handling
         PotionData.PotionInfo info = potionData.calculate(itemId);
-        if (info == null)
-        {
-            return;
-        }
+        if (info == null) return;
+
         int base = info.baseBoost;
         int effective = info.effectiveBoost;
 
-        // Write boost value
         String text;
-
         switch (config.healDisplayMode())
         {
             case BASE:
                 text = "+" + base;
                 break;
-
             case EFFECTIVE:
                 text = "+" + effective;
                 break;
-
             case BOTH:
             default:
                 text = "+" + effective + "/" + base;
                 break;
         }
-        //On hover implementation
-        if(config.onlyShowOnHover())
+
+        // Gradual potions (e.g. prayer regen) get a ~ prefix and no + sign to indicate they restore over time
+        if (info.isGradual)
         {
-            net.runelite.api.Point mouse = client.getMouseCanvasPosition();
-            if(!bounds.contains(mouse.getX(), mouse.getY()))
+            switch (config.healDisplayMode())
             {
-                return;
+                case BASE:
+                    text = "~" + base;
+                    break;
+                case EFFECTIVE:
+                    text = "~" + effective;
+                    break;
+                case BOTH:
+                default:
+                    text = "~" + effective + "/" + base;
+                    break;
             }
         }
+
+        if (config.onlyShowOnHover())
+        {
+            net.runelite.api.Point mouse = client.getMouseCanvasPosition();
+            if (!bounds.contains(mouse.getX(), mouse.getY())) return;
+        }
+
         Font oldFont = graphics.getFont();
         Font customFont = oldFont.deriveFont((float) config.fontSize());
         graphics.setFont(customFont);
@@ -98,33 +90,28 @@ public class PotionOverlay  extends WidgetItemOverlay{
 
         int x;
         int y;
-        //Text position implementation
-        switch (config.textPosition()){
+        switch (config.textPosition())
+        {
             case TOP_LEFT:
                 x = bounds.x + 2;
                 y = bounds.y + 12;
                 break;
-
             case TOP_RIGHT:
                 x = bounds.x + bounds.width - fm.stringWidth(text) - 2;
                 y = bounds.y + 12;
                 break;
-
             case MIDDLE_LEFT:
                 x = bounds.x + 2;
                 y = bounds.y + (bounds.height / 2) + (fm.getAscent() / 2) - 2;
                 break;
-
             case MIDDLE_RIGHT:
                 x = bounds.x + bounds.width - fm.stringWidth(text) - 2;
                 y = bounds.y + (bounds.height / 2) + (fm.getAscent() / 2) - 2;
                 break;
-
             case BOTTOM_LEFT:
                 x = bounds.x + 2;
                 y = bounds.y + bounds.height - 2;
                 break;
-
             case BOTTOM_RIGHT:
             default:
                 x = bounds.x + bounds.width - fm.stringWidth(text) - 2;
@@ -134,38 +121,34 @@ public class PotionOverlay  extends WidgetItemOverlay{
 
         x += config.xOffset();
         y += config.yOffset();
-        //Default text color
-        java.awt.Color oldColor = graphics.getColor();
-        java.awt.Color textColor = Color.WHITE;
 
-        // Shadow Implementation
-        if (config.colorForWaste())
+        java.awt.Color oldColor = graphics.getColor();
+        java.awt.Color textColor;
+
+        // Gradual potions always use the gradual color — waste logic doesn't apply
+        if (info.isGradual)
         {
-            if(effective == 0)
-            {
-                textColor = config.noHealColor();
-            }
-            else if(effective < base)
-            {
-                textColor = config.wasteColor();
-            }
-            else
-            {
-                textColor = config.fullValueColor();
-            }
+            textColor = config.gradualPotionColor();
         }
-        if(config.shadow()) {
+        else if (config.colorForWaste())
+        {
+            if (effective == 0) textColor = config.noHealColor();
+            else if (effective < base) textColor = config.wasteColor();
+            else textColor = config.fullValueColor();
+        }
+        else
+        {
+            textColor = config.fullValueColor();
+        }
+
+        if (config.shadow())
+        {
             graphics.setColor(java.awt.Color.BLACK);
             graphics.drawString(text, x + 1, y + 1);
         }
-        //Draw with userColors
         graphics.setColor(textColor);
-        graphics.drawString(text, x , y);
-        //Reset old color just in case
+        graphics.drawString(text, x, y);
         graphics.setFont(oldFont);
         graphics.setColor(oldColor);
-
     }
-
 }
-

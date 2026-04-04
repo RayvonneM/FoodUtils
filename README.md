@@ -69,8 +69,19 @@ This prevents overlapping overlays.
 
 ## 🚀 Version
 
+**v1.21**
+- Added support for hunter meats with two-stage delayed healing (immediate + 7 tick delay)
+- Added dual/split display mode for delayed heal foods with optional per-portion coloring
+- Added prayer regeneration potion support (gradual restore shown with ~ prefix in gold)
+- Fixed hunter meat heal totals — previously only the first heal stage was shown
+- Fixed strawberry heal formula (was using incorrect rounding)
+- Added basket of strawberries support (all 5 dose variants)
+- Added Armadyl brew, Guthix rest, and Haddock support
+- Blocked TOA-specific items and Menaphite remedy to avoid misleading display values
+- Blocked Bluefin tuna from potion overlay (food item, not a potion)
+
 **v1.2.0**
 - Added potion boost overlay
 - Added mixed consumable handling
 - Switched food handling to RuneLite item stat system
-- Improved overlay accuracy  
+- Improved overlay accuracy

@@ -122,6 +122,12 @@ public class FoodRuleData
         addDelayedHeal(4, 4, ItemID.WILDKEBBIT_COOKED);
         addDelayedHeal(6, 5, ItemID.LARUPIA_COOKED);
         addDelayedHeal(7, 5, ItemID.BARBKEBBIT_COOKED);
+        addDelayedHeal(8, 6, ItemID.GRAAHK_COOKED);
+        addDelayedHeal(9, 8, ItemID.KYATT_COOKED);
+        addDelayedHeal(11, 8, ItemID.FENNECFOX_COOKED);
+        addDelayedHeal(13, 10, ItemID.DASHINGKEBBIT_COOKED);
+        addDelayedHeal(12, 9, ItemID.ANTELOPESUN_COOKED);
+        addDelayedHeal(14, 12, ItemID.ANTELOPEMOON_COOKED);
 
     }
 }

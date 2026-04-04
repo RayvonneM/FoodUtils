@@ -72,7 +72,7 @@ If you notice any bugs or have suggestions, feel free to use the Issues link in 
 - Added support for hunter meats with two-stage delayed healing (immediate + 7 tick delay)
 - Added dual/split display mode for delayed heal foods with optional per-portion coloring
 - Added prayer regeneration potion support (gradual restore shown with ~ prefix in gold)
-- Fixed hunter meat heal totals — previously only the first heal stage was shown
+- Fixed hunter meat heal totals - previously only the first heal stage was shown
 - Fixed strawberry heal formula (was using incorrect rounding)
 - Added basket of strawberries support (all 5 dose variants)
 - Added Armadyl brew, Guthix rest, and Haddock support

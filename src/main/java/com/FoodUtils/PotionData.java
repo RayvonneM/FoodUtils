@@ -1,7 +1,11 @@
 package com.FoodUtils;
 
+import com.FoodUtils.PotionRules.PotionRule;
 import com.google.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.runelite.api.Client;
 
@@ -19,25 +23,44 @@ public class PotionData {
     {
         public final int baseBoost;
         public final int effectiveBoost;
+        // True for potions that restore stats gradually over time rather than instantly
+        public final boolean isGradual;
 
-        private PotionInfo(int baseBoost, int effectiveBoost)
+        private PotionInfo(int baseBoost, int effectiveBoost, boolean isGradual)
         {
             this.baseBoost = baseBoost;
             this.effectiveBoost = effectiveBoost;
+            this.isGradual = isGradual;
         }
     }
     private final ItemStatChangesService itemStatChangesService;
     private final Client client;
+    private final PotionRuleData potionRuleData;
 
     @Inject
-    public PotionData(ItemStatChangesService itemStatChangesService, Client client)
+    public PotionData(PotionRuleData potionRuleData, ItemStatChangesService itemStatChangesService, Client client)
     {
+        this.potionRuleData = potionRuleData;
         this.itemStatChangesService = itemStatChangesService;
         this.client = client;
     }
 
+    // Items with mechanics too complex or unique to display correctly — blocked to avoid misleading values
+    private static final Set<Integer> BLOCKED_ITEMS = new HashSet<>(Arrays.asList(
+            27335, 27337,               // Blessed crystal scarab (gradual prayer restore over time)
+            27202, 27205, 27208, 27211, // Menaphite remedy (gradual combat stat restore over 5 minutes)
+            32344                       // Bluefin tuna (food item, prayer restore should not show on potion overlay)
+    ));
+
     public PotionInfo calculate(int itemId)
     {
+        if (BLOCKED_ITEMS.contains(itemId)) {
+            return null;
+        }
+        PotionRule rule = potionRuleData.getRuleForItemId(itemId);
+                if(rule !=null){
+                    return calculateFromRule(rule);
+                }
         Effect effect = itemStatChangesService.getItemStatChanges(itemId);
         if(effect == null)
         {
@@ -95,8 +118,19 @@ public class PotionData {
             return null;
         }
 
-        return new PotionInfo(bestBase, bestEffective);
+        return new PotionInfo(bestBase, bestEffective, false);
     }
+
+    private PotionInfo calculateFromRule(PotionRule rule)
+    {
+        int realLevel = client.getRealSkillLevel(Skill.PRAYER);
+        int currentLevel = client.getBoostedSkillLevel(Skill.PRAYER);
+        int base = rule.baseRestoreAmount(realLevel);
+        int allowedMax = rule.allowedMaxStat(realLevel);
+        int effective = Math.min(base, Math.max(0, allowedMax - currentLevel));
+        return new PotionInfo(base, effective, true);
+    }
+
     private Skill mapStatToSkill(Stat stat)
     {
         if (stat == null)

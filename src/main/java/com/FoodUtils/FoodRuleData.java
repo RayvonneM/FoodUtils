@@ -41,6 +41,11 @@ public class FoodRuleData
         addRule(new PercentageItemHealRule(pct,flat), itemIds);
     }
 
+    private void addPercentFloor(double pct, int flat, int... itemIds)
+    {
+        addRule(new PercentageFloorItemHealRule(pct, flat), itemIds);
+    }
+
     private void addBrewStyle(double pct, int flat, int... itemIds)
     {
         addRule(new BrewHealRule(pct,flat), itemIds);
@@ -51,13 +56,30 @@ public class FoodRuleData
         addRule(new AnglerFishHealRule(), itemIds);
     }
 
+    private void addHaddock(int... itemIds)
+    {
+        addRule(new HaddockHealRule(), itemIds);
+    }
+
+    private void addDelayedHeal(int immediateHeal, int delayedHeal, int... itemIds)
+    {
+        addRule(new DelayedHealRule(immediateHeal, delayedHeal), itemIds);
+    }
+
+
     private void populateRuleMap()
     {
 
 
-        //Percent Heal
-        addPercentCeil(0.06, 0,
-                ItemID.STRAWBERRY);
+        // Strawberry and basket of strawberries: 1 + floor(6% of base HP), no overheal
+        addPercentFloor(0.06, 1,
+                ItemID.STRAWBERRY,
+                5398, // Basket of strawberries (5)
+                5400, // Basket of strawberries (4)
+                5402, // Basket of strawberries (3)
+                5404, // Basket of strawberries (2)
+                5406  // Basket of strawberries (1)
+        );
 
         //Sarabrew style
 
@@ -76,5 +98,30 @@ public class FoodRuleData
                 ItemID.ANGLERFISH,
                 ItemID.BLIGHTED_ANGLERFISH
         );
+
+        //Haddock (18 HP, overheal scales with level up to +10)
+        addHaddock(32320);
+
+        //Armadyl brew (floor(HP * 10%) + 2, overheal)
+        addBrewStyle(0.10, 2,
+                31650, // 4-dose
+                31653, // 3-dose
+                31656, // 2-dose
+                31659  // 1-dose
+        );
+
+        //Guthix rest (5 HP flat, +5 overheal — uses brew formula with 0% pct)
+        addBrewStyle(0, 5,
+                4417, // 4-dose
+                4419, // 3-dose
+                4421, // 2-dose
+                4423  // 1-dose
+        );
+
+        //Add Hunter Meats (delayed)
+        addDelayedHeal(4, 4, ItemID.WILDKEBBIT_COOKED);
+        addDelayedHeal(6, 5, ItemID.LARUPIA_COOKED);
+        addDelayedHeal(7, 5, ItemID.BARBKEBBIT_COOKED);
+
     }
 }

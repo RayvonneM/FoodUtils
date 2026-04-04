@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'com.FoodUtils'
-version = '1.2'
+version = '1.21'
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
